@@ -11,6 +11,10 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta: ${PORT}`);
 });
 
+app.get("/", (request, response) => {
+  response.send(console.log(`Servidor rodando em http://localhost:${PORT}`));
+});
+
 async function main() {
   const showUsers = await prisma.user.findMany();
 
