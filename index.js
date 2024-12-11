@@ -1,37 +1,49 @@
+import express from "express";
 import { PrismaClient } from "@prisma/client";
 
+const app = express();
 const prisma = new PrismaClient();
 
-async function main() {
-  const newUser = await prisma.user.create({
-    data: {
-      name: "Jose Caçador",
-      email: "jose.cacado@gmail.com",
-    },
-  });
+app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-  console.log("Usuário criado:", newUser);
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta: ${PORT}`);
+});
+
+async function main() {
   const showUsers = await prisma.user.findMany();
+
   console.log("Todos os usuários:", showUsers);
 }
 
-async function updateUser() {
+async function createUser(name, email) {
+  const newUser = await prisma.user.create({
+    data: {
+      name: `${name}`,
+      email: `${email}`,
+    },
+  });
+  console.log("Usuário criado:", newUser);
+}
+
+async function updateUser(email, newName) {
   const updatedUser = await prisma.user.update({
     where: {
-      email: "jose.cacado@gmail.com",
+      email: `${email}`,
     },
     data: {
-      name: "Jose Caçador Atualizado",
+      name: `${newName}`,
     },
   });
 
   console.log("Usuário atualizado:", updatedUser);
 }
 
-async function deleteUser() {
+async function deleteUser(email) {
   const deletedUser = await prisma.user.delete({
     where: {
-      email: "jose.cacado@gmail.com",
+      email: `${email}`,
     },
   });
   console.log("Usuário deletado:", deletedUser);
