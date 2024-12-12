@@ -3,13 +3,11 @@ import path from "node:path";
 import { fileURLToPath } from "url";
 import { StatusCodes } from "http-status-codes";
 import cors from "cors";
-
 import { PrismaClient } from "@prisma/client";
-
-import { generateToken, verifyToken } from "./auth.js";
+import { generateToken } from "./auth.js";
 import { authMiddleware } from "./auth.js";
-
-//dotenv.config();
+import UserController from "./userController.js";
+import AuthController from "./authController.js";
 
 const app = express();
 
@@ -31,31 +29,14 @@ app.get("/", (request, response) => {
   response.send(StatusCodes.ACCEPTED);
 });
 
-app.get("/users", authMiddleware, async (request, response) => {
-  try {
-    const users = await prisma.user.findMany();
-    response.status(200).json(users);
-  } catch (error) {
-    console.error("Erro ao buscar usuários: ", error);
-    response.status(500).json({ error: "Erro interno no servidor" });
-  }
+const userController = new UserController(prisma);
+app.get("/users", authMiddleware, (request, response) => {
+  userController.getUsers(request, response);
 });
 
-app.post("/login", async (request, response) => {
-  const { email } = request.body;
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-    if (!user) {
-      return response.status(404).json({ error: "Usuário não encontrado" });
-    }
-    const token = generateToken(user);
-    return response.status(200).json({ token });
-  } catch (error) {
-    console.error("Erro ao autenticar usuário: ", error);
-    return response.status(500).json({ error: "Erro interno do servidor" });
-  }
+const authController = new AuthController(prisma);
+app.post("/login", (request, response) => {
+  authController.login(request, response);
 });
 
 async function main() {
