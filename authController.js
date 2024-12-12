@@ -1,6 +1,6 @@
 import { generateToken } from "./auth.js";
 
-export default class AuthController {
+export default class UserAuthController {
   constructor(prisma) {
     this.prisma = prisma;
   }
