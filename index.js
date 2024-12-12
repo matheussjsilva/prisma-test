@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import { StatusCodes } from "http-status-codes";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
-import { generateToken } from "./auth.js";
 import { authMiddleware } from "./auth.js";
 import UserController from "./userController.js";
 import AuthController from "./authController.js";

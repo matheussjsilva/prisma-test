@@ -1,4 +1,4 @@
-# Projeto com Express e Prisma
+# Projeto com Express, Prisma e JWT
 
 Este projeto utiliza o Express.js e o Prisma ORM para criar uma API básica de gerenciamento de usuários. A API permite criar, listar, atualizar e excluir usuários no banco de dados.
 
